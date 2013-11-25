@@ -1,10 +1,11 @@
 import urllib.request
 import urllib.error
 import socket
+import sys
 
 
-class routeRestart:
-    '''Little script for reboot router ZOOm 5352 \r\n 
+class modemRestart:
+    '''Little class for reboot router ZOOm 5352 \r\n 
     Usage: script.py ip login password \r\n
     Example: script.py 192.168.0.1 admin password'''
     
@@ -21,7 +22,10 @@ class routeRestart:
         #logining
         req = urllib.request.Request(url, login_data)
         try:
-            urllib.request.urlopen(req, timeout=3)#.read().decode('utf8')
+            resp = urllib.request.urlopen(req, timeout=3).geturl()
+            if resp != "http://192.168.0.1/RgConnect.asp":
+                print("Login or password incorrect")
+                exit(1)
         except urllib.error.URLError:
             print("Server doesn't respond")
             exit(1)
@@ -48,9 +52,14 @@ class routeRestart:
             
             
 def main():
-    ex = routeRestart("192.168.0.1", 'admi', 'admin')
-    ex.singup()
-    ex.reboot()
+    if len(sys.argv) != 4:
+        print("\r\nUsage: python3 script.py modem_ip login password \r\n\
+Example: ./{} 192.168.0.1 admin password\r\n".format(sys.argv[0]))
+    else:
+        ob = modemRestart(sys.argv[1], sys.argv[2], sys.argv[3])
+        ob.singup()
+        ob.reboot()
+        
 if __name__ == '__main__':
     main()
     
