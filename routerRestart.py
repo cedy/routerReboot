@@ -23,7 +23,7 @@ class modemRestart:
         req = urllib.request.Request(url, login_data)
         try:
             resp = urllib.request.urlopen(req, timeout=3).geturl()
-            if resp != "http://192.168.0.1/RgConnect.asp":
+            if resp != "http://{0}/RgConnect.asp".format(self.ip):
                 print("Login or password incorrect")
                 exit(1)
         except urllib.error.URLError:
